@@ -1,13 +1,27 @@
 {
   "name": "solana-balance-statusbar",
   "displayName": "Solana Balance Statusbar",
-  "description": "View Solana balance in VSCode's statusbar",
+  "description": "View Solana balance in VS Code's statusbar",
   "version": "1.0.0",
+  "publisher": "donuts-are-good",
+  "author": {
+    "name": "donuts-are-good"
+  },
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.60.0"
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "sol",
+    "solana",
+    "blockchain",
+    "cryptocurrency",
+    "balance",
+    "wallet",
+    "account"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -20,18 +34,18 @@
         "solanaBalance.walletPath": {
           "type": "string",
           "default": "~/.config/solana/id.json",
-          "description": "Path to the Solana wallet file"
+          "description": "Path to the Solana wallet file. The normal location for this in Linux and MacOS is ~/.config/solana/id.json"
         },
         "solanaBalance.updateInterval": {
           "type": "number",
           "default": 10,
-          "description": "Update interval in seconds. Note: Setting this too low may impact performance."
+          "description": "Update interval in seconds. Every this-many seconds, we will be checking with solana's cli tools for your wallet address, your config, and your balance. Note: Setting this too low may impact performance. "
         },
         "solanaBalance.displayFormat": {
           "type": "string",
           "enum": ["short", "long"],
           "default": "long",
-          "description": "Display format for the status bar."
+          "description": "Display format for the status bar. If you change this, it will take effect in the number of seconds you used for the update interval. Usually that's 10 seconds unless it has been changed."
         }
       }
     }
@@ -40,6 +54,10 @@
     "type": "git",
     "url": "https://github.com/donuts-are-good/solana-balance-statusbar.git"
   },
+  "bugs": {
+    "url": "https://github.com/donuts-are-good/solana-balance-statusbar/issues"
+  },
+  "homepage": "https://github.com/donuts-are-good/solana-balance-statusbar#readme",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -51,6 +69,6 @@
     "typescript": "^4.3.5"
   },
   "solanaCliInfo": {
-    "description": "This extension requires the Solana CLI to be installed. For installation instructions, visit: https://docs.solanalabs.com/cli/install"
+    "description": "This extension requires the Solana CLI to be installed. For installation instructions, visit: https://docs.solanalabs.com/cli/install These tools are what enables this extension to query for your wallet address, your Solana config details, and your balance."
   }
 }

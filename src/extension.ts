@@ -34,6 +34,7 @@ async function updateStatusBar() {
         const keyPath = vscode.workspace.getConfiguration('solanaBalance').get('walletPath') as string;
         const { stdout: balance } = await execPromise(`solana balance --keypair ${keyPath}`);
         const { stdout: address } = await execPromise(`solana address --keypair ${keyPath}`);
+        const { stdout: config } = await execPromise('solana config get');
         
         const shortAddress = `${address.trim().slice(0, 4)}...${address.trim().slice(-4)}`;
         const displayFormat = vscode.workspace.getConfiguration('solanaBalance').get('displayFormat') as string;
@@ -44,17 +45,27 @@ async function updateStatusBar() {
             statusBarItem.text = `Balance: ${balance.trim()} | Address: ${shortAddress} [Solscan]`;
         }
 
-        statusBarItem.tooltip = `Click to open in Solscan`;
+        // Determine the network from the RPC URL
+        const rpcUrl = config.match(/RPC URL: (.*)/)?.[1].toLowerCase() || '';
+        let network = 'mainnet';
+        if (rpcUrl.includes('devnet')) {
+            network = 'devnet';
+        } else if (rpcUrl.includes('testnet')) {
+            network = 'testnet';
+        }
+
+        statusBarItem.tooltip = `${config}\n\nClick to view wallet on Solscan (${network})`;
         statusBarItem.command = {
             title: "Open in Solscan",
             command: "vscode.open",
-            arguments: [vscode.Uri.parse(`https://solscan.io/account/${address.trim()}`)]
+            arguments: [vscode.Uri.parse(`https://solscan.io/account/${address.trim()}${network !== 'mainnet' ? `?cluster=${network}` : ''}`)]
         };
     } catch (err) {
         statusBarItem.text = 'Error reading Solana data';
         statusBarItem.tooltip = 'Error executing Solana CLI commands';
     }
 }
+
 
 function getUpdateInterval(): number {
     return vscode.workspace.getConfiguration('solanaBalance').get('updateInterval', 10) * 1000;

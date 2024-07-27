@@ -1,0 +1,27 @@
+# macOS bullshit
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Extension specific
+out/
+*.vsix
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
